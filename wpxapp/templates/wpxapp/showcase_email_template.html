@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Properties Showcase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+        
+        .header {
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 20px;
+            width: 600px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            max-width: 150px;
+        }
+        
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-top: 0;
+            color: #f5694b;
+        }
+        
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .image {
+            width: calc(33.33% - 10px);
+            height: 200px;
+            overflow: hidden;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .overlay-text {
+            color: #ffffff;
+            font-size: 18px;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .image:hover .overlay {
+            opacity: 1;
+        }
+        
+        .footer {
+            text-align: center;
+            background-color: #f5694b;
+            padding: 20px;
+            font-size: 14px;
+            color: #ffffff;
+            width: 600px;
+            margin: 0 auto;
+        }
+        
+        .social-icons {
+            margin-right: 10px;
+        }
+        
+        .follow-text {
+            margin-top: 10px;
+        }
+        
+        .contact-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffffff;
+            color: #f5694b;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .contact-button:hover {
+            background-color: #f2f2f2;
+        }
+        
+        .whatsapp-icon {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .reviews {
+    margin-top: 40px;
+}
+
+.reviews h2 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.review {
+    display: flex;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.review .profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+.review .content {
+    flex: 1;
+}
+
+.review h3 {
+    font-size: 18px;
+    color: #f5694b;
+    margin-top: 0;
+}
+
+.review p.text {
+    font-size: 16px;
+    color: #333333;
+    line-height: 1.5;
+}
+
+.review:hover {
+            cursor: pointer;
+            background-color: #ebebeb;
+        }
+
+.referral-section {
+            background-color: #f9f9f9;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .referral-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .referral-title {
+            font-size: 28px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        
+        .referral-text {
+            font-size: 18px;
+            line-height: 1.5;
+            color: #666666;
+            margin-bottom: 30px;
+        }
+        
+        .referral-button {
+            padding: 12px 24px;
+            background-color: #f5694b;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .referral-button:hover {
+            background-color: #e85c3a;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .header, .content, .footer {
+                width: 100%;
+            }
+            
+            .logo {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="logo" src="http://www.nomadroof.com/wp-content/uploads/2016/06/LogoIcon.png" alt="Company Logo">
+    </div>
+    
+    <div class="content">
+        <h1>Discover Your Perfect Home Abroad!</h1>
+        
+        <p>At Nomadroof, we pride ourselves on offering top-quality properties that meet your needs and preferences. Here's why our properties are the best:</p>
+        
+        <ol>
+            <li>
+                <h3>Strict Verification and Selection</h3>
+                <p>We strictly verify and select all our properties, ensuring they meet our high standards of quality and safety.</p>
+            </li>
+            
+            <li>
+                <h3>Prime Locations</h3>
+                <p>Our properties are located in prime areas that cater to your preferences. Whether you prefer living near the ocean for surfing, amidst popular hotspots, or within walking distance to your university, we've got you covered. Enjoy the convenience of being close to your desired destinations!</p>
+            </li>
+            
+            <li>
+                <h3>Multicultural Households</h3>
+                <p>We believe in the power of diversity and multicultural experiences. Our properties have roommates from different nationalities, creating a vibrant and inclusive environment for everyone.</p>
+            </li>
+        </ol>
+        
+        <h2>Explore Our Properties</h2>
+        
+        <div class="gallery">
+            <a href="https://bit.ly/3C2OhJv"  class="image">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2019/11/erasmus-student-apartment-san-isidro-usil-living-room-5.jpg" alt="Property 1">
+                <div class="overlay">
+                    <div class="overlay-text">View Property</div>
+                </div>
+            </a>
+            <a href="https://bit.ly/3C2OhJv"  class="image">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/depa-milano-student-apartment-universidad-del-pacifico-erasmus.jpg" alt="Property 2">
+                <div class="overlay">
+                    <div class="overlay-text">View Property</div>
+                </div>
+            </a>
+            <a href="https://bit.ly/3C2OhJv"  class="image">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/room-for-rent-miraflores-erasmus-apartment-7-RUPAC-Pool.jpg" alt="Property 3">
+                <div class="overlay">
+                    <div class="overlay-text">View Property</div>
+                </div>
+            </a>
+            <a href="https://bit.ly/3C2OhJv"  class="image">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/milpu-room-for-rent-miraflores-erasmus-lima-living-room-students.jpg" alt="Property 4">
+                <div class="overlay">
+                    <div class="overlay-text">View Property</div>
+                </div>
+            </a>
+            <a href="https://bit.ly/3C2OhJv"  class="image">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2021/07/miraflores-ocean-view-student-apartment-erasmus-balcony-2.jpg" alt="Property 5">
+                <div class="overlay">
+                    <div class="overlay-text">View Property</div>
+                </div>
+            </a>
+            <a href="https://bit.ly/3C2OhJv" class="image">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2019/11/4.jpg" alt="Property 6">
+                <div class="overlay">
+                    <div class="overlay-text">View Property</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="referral-section">
+            <div class="referral-container">
+                <h2 class="referral-title">Refer a Friend and Earn $20</h2>
+                <p class="referral-text">Do you know someone who would love our properties?</p>
+                <p class="referral-text">Refer them to us and earn $20 for each successful referral!</p>
+                <a href="https://bit.ly/3WLO4E2" class="referral-button">More Info</a>
+            </div>
+        </div>
+
+        <div class="reviews">
+            <h2>What our friends are saying:</h2>
+            <div class="review" onclick="window.location.href='https://bit.ly/3C7LJcV';">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/jule-image-review.jpeg" alt="Profile Image" class="profile-image">
+                <div class="content">
+                    <h3>Jule</h3>
+                    <p class="text">"Used one of their housing options during my semester abroad in Lima. Had such a great time and can only recommend! Tom & others went out of their way to organize social gatherings, fun events and give helpful tips for anything and everything 🙂"</p>
+                </div>
+            </div>
+            <div class="review" onclick="window.location.href='https://bit.ly/3C7LJcV';">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/cornelia-review-image.jpeg" alt="Profile Image" class="profile-image">
+                <div class="content">
+                    <h3>Cornelia</h3>
+                    <p class="text">"I highly recommend using Nomadroof, thankful for all the support received during the process and during the whole stay in Lima. Couldn’t wish for a better placement and safeness.
+                        Highly recommended to all international people who are searching for reliable accommodation provider. Won’t regret this experience."</p>
+                </div>
+            </div>
+            <div class="review" onclick="window.location.href='https://bit.ly/3C7LJcV';">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/gabriele_review_image.jpeg" alt="Profile Image" class="profile-image">
+                <div class="content">
+                    <h3>Gabriele</h3>
+                    <p class="text">"Sono stato in un appartamento Nomadroof durante il mio exchange a Lima e mi sono trovato benissimo. Lo staff è accogliente e disponibile e l’ambiente è ottimo. Lo consiglio vivamente!"</p>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <p>For more information about our properties, please contact us:</p>
+        
+        <p>
+            <a href="https://bit.ly/3IKs32C" target="_blank" class="contact-button">
+                <img class="whatsapp-icon" src="https://www.nomadroof.com/wp-content/uploads/2023/05/whatsapp_green_icon_48px.png" alt="WhatsApp Icon">
+                Contact Us on WhatsApp
+            </a>
+        </p>
+    </div>
+    
+    <div class="footer">
+        <a href="https://bit.ly/3C7LJcV" target="_blank" class="social-icons">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_facebook-logo_icon_48x48.png" alt="Facebook Icon" width="24" height="24">
+        </a>
+        <a href="https://bit.ly/3oFBgT5" target="_blank" class="social-icons">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_app_instagram_logo_icon_48x48.png" alt="Instagram Icon" width="24" height="24">
+        </a>
+        <p class="follow-text">Unlock the Magic of Nomadroof Friendships</p>
+    </div>
+</body>
+</html>

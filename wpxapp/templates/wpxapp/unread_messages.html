@@ -1,0 +1,238 @@
+{% extends "wpxapp/base.html" %}
+
+{% block content %}
+    
+    <div class="container">
+        <h1 class="heading">Unread Messages</h1>
+        <div class="notification-bar">
+            <button id="notify-sender-btn" disabled>Notify Sender</button>
+        </div>
+        <div class="table-responsive">
+            <table class="message-table">
+                <thead>
+                    <tr>
+                        <th></th> <!-- Checkbox column -->
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Content</th>
+                        <th>From User</th>
+                        <th>From User Picture</th>
+                        <th>To User</th>
+                        <th>To User Picture</th>
+                        <th>Status</th>
+                        <th>Booking Reference ID</th>
+                        <th>From Name</th>
+                        <th>Receiver Name</th>
+                        <th>Receiver Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="checkbox-row">
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.post_date }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.post_title }}</div>
+                        </td>
+                        <td>
+                            <div class="cell truncate" onclick="showPopup('{{ row.post_content|escapejs }}')">{{ row.post_content }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.message_from_user }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">
+                                {% if row.from_user_custom_picture == 'https://www.nomadroof.com/wp-content/themes/wprentals/img/default_user.png' %}
+                                    <img class="profile-picture" src="https://www.nomadroof.com/wp-content/uploads/2023/07/nomadroof-deafult-icon.png" alt="From User Picture">
+                                {% else %}
+                                    <img class="profile-picture" src="{{ row.from_user_custom_picture }}" alt="From User Picture">
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.message_to_user }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">
+                                {% if row.to_user_custom_picture == 'https://www.nomadroof.com/wp-content/themes/wprentals/img/default_user.png' %}
+                                    <img class="profile-picture" src="https://www.nomadroof.com/wp-content/uploads/2023/07/nomadroof-deafult-icon.png" alt="To User Picture">
+                                {% else %}
+                                    <img class="profile-picture" src="{{ row.to_user_custom_picture }}" alt="To User Picture">
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.message_status }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.booking_reference_id }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.from_user_first_name|safe }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.to_user_first_name|safe }}</div>
+                        </td>
+                        <td>
+                            <div class="cell">{{ row.to_user_email }}</div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function showPopup(content) {
+            alert(content); // Replace with your custom pop-up logic
+        }
+
+        function getCSRFToken() {
+            const csrfCookie = document.cookie.match(/csrftoken=([\w-]+)/);
+            return csrfCookie ? csrfCookie[1] : '';
+        }
+
+        function notifySender() {
+    var selectedRows = [];
+    $('.checkbox-row:checked').each(function() {
+        var row = $(this).closest('tr');
+        //var urlImageFromUser = row.find('td:nth-child(6) .cell').text();
+        var fromUserPictureEl = row.find('td:nth-child(6) .cell').find('img');
+        var urlImageFromUser = '';
+
+        if (fromUserPictureEl.length > 0) {
+            urlImageFromUser = fromUserPictureEl.attr('src');
+        }
+        var fromName = row.find('td:nth-child(11) .cell').text();
+        var receiverName = row.find('td:nth-child(12) .cell').text();
+        var email = row.find('td:nth-child(13) .cell').text();
+
+        console.log('urlImageFromUser:', urlImageFromUser);
+        console.log('fromName:', fromName);
+        console.log('receiverName:', receiverName);
+        console.log('email:', email);
+
+        if (urlImageFromUser.trim() !== '' && fromName.trim() !== '' && receiverName.trim() !== '' && email.trim() !== '') {
+            var dict = {
+            receiver_email: email,
+            receiver_name: receiverName,
+            from_name: fromName,
+            profile_picture_url: urlImageFromUser
+        };
+
+
+            selectedRows.push(dict);
+        } else {
+            // Show an error message indicating the missing value
+            alert('Missing value for one or more fields.');
+            return;
+        }
+    });
+
+    if (selectedRows.length === 0) {
+        alert('No valid values selected.');
+        return;
+    }
+
+    var requestData = {
+        rows: JSON.stringify(selectedRows)
+    };
+
+    $.ajax({
+        url: '{% url "send_received_message_email" %}', // Replace with your Django view URL
+        type: 'GET',
+        data: requestData,
+        success: function(data) {
+            // Handle success
+            console.log(data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            // Handle error
+            console.error('AJAX request failed for sending received message email:', textStatus);
+        }
+    });
+}
+
+
+
+
+        // Select/deselect checkboxes and enable/disable notify sender button
+        $(document).ready(function() {
+            const checkboxes = $('.checkbox-row');
+            const notifySenderBtn = $('#notify-sender-btn');
+
+            checkboxes.on('change', function() {
+                const checkedCount = $('.checkbox-row:checked').length;
+                notifySenderBtn.prop('disabled', checkedCount === 0);
+            });
+
+            notifySenderBtn.on('click', function() {
+                notifySender();
+            });
+        });
+
+
+    </script>
+    
+
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px; /* Adjust the max-width as needed */
+            cursor: pointer;
+        }
+
+        .profile-picture {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .notification-bar {
+            margin-bottom: 10px;
+        }
+
+        #notify-sender-btn {
+            padding: 10px 20px;
+            background-color: #f5694b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #notify-sender-btn:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+    </style>
+{% endblock content %}

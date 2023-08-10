@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Message Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #f5694b;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f5694b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .sender-name {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #f5694b;
+        }
+
+        .inbox-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .support-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .support-email {
+            color: #f5694b;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+            text-align: center;
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 12px;
+            line-height: 18px;
+            color: #848789;
+            text-transform: uppercase;
+        }
+
+        .footer a {
+            text-decoration: underline;
+            color: #848789;
+        }
+
+        .footer .social-icons img {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .social-icons {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="http://www.nomadroof.com/wp-content/uploads/2016/06/LogoIcon.png" alt="Logo">
+        </div>
+        <h1>New Message Notification</h1>
+        <p>Hello {{ receiverFirstName }},</p>
+        <div class="profile-section">
+            <img class="profile-picture" src="{{ profilePictureUrl }}" alt="Sender's Picture">
+            <p class="sender-name">{{ senderFirstName }}</p>
+        </div>
+        <div class="inbox-section">
+            <p>You have received a new message in your inbox.</p>
+            <a href="https://www.nomadroof.com/inbox/" class="button">Go to Inbox</a>
+        </div>
+        <div class="support-section">
+            <p>If you have any questions or need assistance, please contact our support team at <span class="support-email">customersupport@nomadroof.com</span>.</p>
+        </div>
+        <div class="footer">
+            <div class="social-icons">
+                <a href="https://bit.ly/3C7LJcV" target="_blank"><img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_facebook-logo_icon_48x48.png" alt="Facebook Icon"></a>
+                <a href="https://bit.ly/3oFBgT5" target="_blank"><img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_app_instagram_logo_icon_48x48.png" alt="Instagram Icon"></a>
+            </div>
+            <p>&copy; 2023 Nomadroof. All Rights Reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

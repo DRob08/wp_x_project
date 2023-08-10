@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservation Confirmation Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .logo {
+            display: block;
+            max-width: 200px;
+            height: auto;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+
+        .banner-img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            /* Set the desired width and height for the image */
+            width: 600px;
+            height: 300px;
+        }
+
+        .content {
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+        /* Apply the color #f5694b to specific elements */
+        h1 {
+            color: #f5694b;
+        }
+
+        .banner-img {
+            border: 1px solid #f5694b;
+        }
+
+        .footer p {
+            color: #f5694b;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f5694b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .details {
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        .whatsapp-link {
+            display: inline-block;
+            background-color: #f5694b;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .whatsapp-link-icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .follow-text {
+            font-size: 14px;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom:20px;
+            color: #f5694b;
+        }
+
+        .expired {
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="http://www.nomadroof.com/wp-content/uploads/2016/06/LogoIcon.png" alt="Company Logo" class="logo">
+            <img src="{{ image_path|safe }}" alt="Banner" class="banner-img">
+            <h1>Reservation Confirmation Reminder</h1>
+        </div>
+
+        <div class="content">
+            <p>Dear {{ tenant }},</p>
+            <p>Our records indicate that one or more of your reservations are pending invoice confirmation. Please proceed to complete the reservation confirmation to lock in your desired flat. Our system will automatically cancel this booking within the next 48 hours if not confirmed.</p>
+
+            <div id="timer"></div>
+            <div class="details">
+                <h2>Booking Details</h2>
+                <p>Property Name: {{ property_name }}</p>
+                <p>Booking No#: {{ booking_number }}</p>
+                <p>Invoice #: {{ invoice_number }}</p> 
+                 <!-- Property Features section -->
+                <h2>Property Features</h2>
+                <ul class="feature-list">
+                    <li>{{ about_neighborhood }}</li>
+                </ul>
+            </div>
+
+           
+
+            <p>Click the button below to complete the reservation confirmation:</p>
+            <a href="https://bit.ly/45v2Z9L" class="action-button">Complete Reservation Confirmation</a>
+
+            <p>If you have any questions, feel free to reach out to us on WhatsApp:</p>
+            <p>
+                <a href="https://bit.ly/3ILbeVe" class="whatsapp-link">
+                    <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/whatsapp_green_icon_48px.png" alt="WhatsApp Icon" class="whatsapp-link-icon" width="16" height="16">
+                    WhatsApp Us
+                </a>
+            </p>
+
+            <p>Have a great day!</p>
+
+            <p>Sincerely,</p>
+            <p style="color: #f5694b;">Nomadroof Team</p>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="https://bit.ly/3C7LJcV" target="_blank" class="social-icons">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_facebook-logo_icon_48x48.png" alt="Facebook Icon" width="24" height="24">
+        </a>
+        <a href="https://bit.ly/3oFBgT5" target="_blank" class="social-icons">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_app_instagram_logo_icon_48x48.png" alt="Instagram Icon" width="24" height="24">
+        </a>
+        <p class="follow-text">Unlock the Magic of Nomadroof Friendships</p>
+    </div>
+</body>
+
+<script>
+    // Set the countdown duration (48 hours)
+    var countdownDuration = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
+
+    // Calculate the countdown end time
+    var countdownEnd = new Date().getTime() + countdownDuration;
+
+    // Update the countdown every second
+    var countdown = setInterval(function() {
+        // Get the current date and time
+        var now = new Date().getTime();
+
+        // Calculate the remaining time
+        var distance = countdownEnd - now;
+
+        // Check if the countdown has ended
+        if (distance < 0) {
+            clearInterval(countdown);
+            document.getElementById("timer").innerHTML = "Countdown expired";
+            document.getElementById("timer").className = "expired";
+        } else {
+            // Calculate days, hours, minutes, and seconds
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the countdown
+            document.getElementById("timer").innerHTML = "Time remaining: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+        }
+    }, 1000);
+</script>
+</html>

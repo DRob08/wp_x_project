@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Accommodation Assistance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: block;
+            max-width: 200px;
+            height: auto;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .content {
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        h1 {
+            color: #f5694b;
+        }
+
+        .action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f5694b;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .footer a {
+            color: #f5694b;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .follow-text {
+            font-size: 12px;
+            color: #f5694b;
+            font-weight: bold;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+        }
+
+        .image-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .image-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .image-item:hover {
+            transform: scale(1.05);
+        }
+
+        .reviews {
+            margin-top: 20px;
+        }
+
+        .review-item {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .review-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .review-text {
+            font-style: italic;
+        }
+
+        .review-author {
+            font-weight: bold;
+        }
+
+        .review-item:hover {
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/fbprofile-nomadroof-logo.png" alt="Company Logo" class="logo" style="margin-bottom: 5px;">
+            <h1 style="margin-top: 0;">Student Accommodation Assistance</h1>
+        </div>
+
+        <div class="image-grid">
+            <div class="image-item" onclick="window.open('https://www.nomadroof.com/exclusive-properties/', '_blank')">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/residence-universidad-catolica-universidad-pacifico-erasmus-art-1.jpg" alt="Image 1">
+            </div>
+            <div class="image-item" onclick="window.open('https://www.nomadroof.com/exclusive-properties/', '_blank')">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/miraflores-arica-student-house-erasmus-universidad-del-pacifico-living-room.jpg" alt="Image 2">
+            </div>
+            <div class="image-item" onclick="window.open('https://www.nomadroof.com/exclusive-properties/', '_blank')">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/erasmus-student-apartment-san-isidro-usil-living-room-5.jpg" alt="Image 3">
+            </div>
+            
+        </div>
+
+        <div class="content">
+            <p>Dear Students,</p>
+            <p>As the start of the new semester in Peru Universities approaches, we wanted to remind you that if you need any assistance finding accommodation, please do not hesitate to let us know. We understand that finding the right place to live can be a challenging task, especially if you are new to the area or unfamiliar with the local rental market.</p>
+
+            <p>Our team is here to help you in any way we can. Whether you need advice on where to start your search, information on available housing options, or assistance in navigating the rental process, we are ready and willing to assist you. Our goal is to ensure that you have a comfortable and safe place to live while you pursue your academic goals.</p>
+
+            <p>Please keep in mind that the sooner you reach out to us, the more time we will have to assist you. We encourage you to contact us as soon as possible so that we can begin working together to find the best possible accommodation for your needs.</p>
+
+            <p>To request assistance, simply reply to this email, and one of our team members will be in touch with you shortly.</p>
+
+            <p>We wish you all the best as you prepare for the upcoming academic year and look forward to hearing from you soon.</p>
+
+            <p>Best regards,</p>
+            <p style="color: #f5694b;">Nomadroof Team</p>
+        </div>
+
+        <div class="reviews">
+            <div class="review-item" onclick="window.location.href='https://bit.ly/3C7LJcV'">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/jule-image-review.jpeg" alt="Profile 1">
+                <div>
+                    <p class="review-text">"Used one of their housing options during my semester abroad in Lima. Had such a great time and can only recommend! Tom & others went out of their way to organize social gatherings, fun events and give helpful tips for anything and everything 🙂"</p>
+                    <p class="review-author">- Jule</p>
+                </div>
+            </div>
+            <div class="review-item" onclick="window.location.href='https://bit.ly/3C7LJcV'">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/cornelia-review-image.jpeg" alt="Profile 2">
+                <div>
+                    <p class="review-text">"I highly recommend using Nomadroof, thankful for all the support received during the process and during the whole stay in Lima. Couldn’t wish for a better placement and safeness.
+                        Highly recommended to all international people who are searching for reliable accommodation provider. Won’t regret this experience."</p>
+                    <p class="review-author">- Cornelia</p>
+                </div>
+            </div>
+            <div class="review-item" onclick="window.location.href='https://bit.ly/3C7LJcV'">
+                <img src="https://www.nomadroof.com/wp-content/uploads/2023/04/gabriele_review_image.jpeg" alt="Profile 3">
+                <div>
+                    <p class="review-text">"Sono stato in un appartamento Nomadroof durante il mio exchange a Lima e mi sono trovato benissimo. Lo staff è accogliente e disponibile e l’ambiente è ottimo. Lo consiglio vivamente!"</p>
+                    <p class="review-author">- Gabriele </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="https://bit.ly/3C7LJcV" target="_blank" class="social-icons">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_facebook-logo_icon_48x48.png" alt="Facebook Icon" width="24" height="24">
+        </a>
+        <a href="https://bit.ly/3oFBgT5" target="_blank" class="social-icons">
+            <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_app_instagram_logo_icon_48x48.png" alt="Instagram Icon" width="24" height="24">
+        </a>
+        <p class="follow-text">Unlock the Magic of Nomadroof Friendships</p>
+    </div>
+</body>
+</html>

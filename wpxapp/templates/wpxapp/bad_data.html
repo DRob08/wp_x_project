@@ -1,0 +1,120 @@
+{% extends "wpxapp/base.html" %}
+
+{% block content %}
+
+<!-- bad_data.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bad Data</title>
+
+    <style>
+        th {
+            background-color: black;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bad Data</h1>
+        <form> <!-- Add the form tag here -->
+            {% csrf_token %} <!-- Include the CSRF token input element -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Post ID</th>
+                        <th>First Name</th>
+                        <th>User Email</th>
+                        <th>Property ID</th>
+                        <th>Owner Alias</th>
+                        <th>Property Name</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td><input type="checkbox" name="item[]" value="1"></td>
+                        <td>{{ row.post_date }}</td>
+                        <td>{{ row.post_title }}</td>
+                        <td>{{ row.check_in }}</td>
+                        <td>{{ row.check_out }}</td>
+                        <td>{{ row.ID }}</td>
+                        <td>{{ row.first_name }}</td>
+                        <td>{{ row.user_email }}</td>
+                        <td>{{ row.prop_id }}</td>
+                        <td>{{ row.owner_alias }}</td>
+                        <td>{{ row.prop_name }}</td>
+                    
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </form>
+        <button class="btn btn-primary" onclick="fixData()">Fix Data</button>
+    </div>
+
+   
+</body>
+
+<script>
+function fixData() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    const selectedRows = Array.from(checkboxes).map(checkbox => checkbox.closest('tr'));
+    const data = selectedRows.map(row => {
+        return {
+            date: row.cells[1].textContent,
+            title: row.cells[2].textContent,
+            checkIn: row.cells[3].textContent,
+            checkOut: row.cells[4].textContent,
+            postId: row.cells[5].textContent,
+            firstName: row.cells[6].textContent,
+            userEmail: row.cells[7].textContent,
+            propertyId: row.cells[8].textContent,
+            ownerAlias: row.cells[9].textContent,
+            propertyName: row.cells[10].textContent,
+        };
+    });
+
+    console.log(data);
+    
+    // Get the CSRF token from the HTML input element
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    // Send the data to the Django view using jQuery AJAX
+    $.ajax({
+        url: '{% url "fix_data" %}',
+        type: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        headers: {
+            'X-CSRFToken': csrftoken
+        },
+        success: function(response) {
+            // Handle the success response from the Django view
+            console.log(response);
+            // Perform any additional actions or display success message
+        },
+        error: function(error) {
+            // Handle the error response from the Django view
+            console.log(error);
+            // Display error message or perform error handling
+        }
+    });
+}
+
+</script>
+</html>
+
+{% endblock content %}

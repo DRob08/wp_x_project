@@ -1,0 +1,131 @@
+{% extends "wpxapp/base.html" %}
+
+{% block content %}
+
+<head>
+    <title>Registered Users</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .year-section {
+            margin-bottom: 20px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .user-table th,
+        .user-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .user-name {
+            font-weight: bold;
+        }
+
+        .process-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Registered Users</h1>
+
+        {% for year, user_list in users.items %}
+        <div class="year-section">
+            <h2>{{ year }}</h2>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th></th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Country</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in user_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><input type="checkbox"></td>
+                        <td><span class="user-first-name">{{ user.first_name }}</span></td>
+                        <td><span class="user-last-name">{{ user.last_name }}</span></td>
+                        <td><span class="user-email">{{ user.email }}</span></td>
+                        <td><span class="user-country">{{ user.country }}</span></td>
+                        <td><span class="user-phone">{{ user.phone }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="process-button">Process</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+           var selectedRows = [];
+          $('.process-button').on('click', function() {
+            var yearSection = $(this).closest('.year-section');
+            var selectedEmails = yearSection.find('input[type="checkbox"]:checked').map(function() {
+              var row = $(this).closest('tr');
+              var firstName = row.find('.user-first-name').text();
+              var lastName = row.find('.user-last-name').text();
+              var email = row.find('.user-email').text();
+              var dict = {
+                email: row.find('.user-email').text(),
+                firstName: row.find('.user-first-name').text(),
+                lastName: row.find('.user-last-name').text(),
+              };
+
+              selectedRows.push(dict);
+
+              return firstName + ' ' + lastName + ': ' + email;
+
+             
+            }).get();
+            
+            var message = 'Selected emails:\n' + selectedEmails.join('\n');
+            alert(message);
+
+            var requestData = {
+                rows: JSON.stringify(selectedRows)
+             };
+      
+            $.ajax({
+              url: '{% url "sendegeneralemail" %}',
+              type: 'GET',
+              data: requestData,
+              success: function(data) {
+                // Handle success
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.log('AJAX request failed for sending general email: ' + textStatus);
+              }
+            });
+            
+          });
+        });
+      </script>
+      
+</body>
+
+{% endblock content %}

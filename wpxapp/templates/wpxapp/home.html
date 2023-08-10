@@ -1,0 +1,687 @@
+{% extends "wpxapp/base.html" %}
+
+{% block content %}
+
+<style>
+    .highlight-checkin {
+        background-color: #ff0000; /* Red color as the background for the highlighted "Check In" column */
+        color: #ffffff; /* White text color to make the text readable on red background */
+    }
+    </style>
+
+<h2 class="text-center mt-4">Nomadroof Bookings Status</h2>
+
+<div class="line"></div>
+
+<!--<p> This is the Nomadroof App to manage and view different functionalities, Check the button desired and load info from booking as per request</p>-->
+
+<div class="container-fluid mt-4">
+    <div class="card card-outline-secondary">
+        <div class="card-body">
+            <div class="row mt-4" style="width:100%">
+                <div class="col-sm-3 text-center pb-3">
+
+                    <!-- Default inline 1-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input radios" id="rdoconfirmed"
+                               name="inlineDefaultRadiosExample">
+                        <label class="custom-control-label" for="rdoconfirmed">Confirmed/Paid</label>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-sm-3 text-center pb-3">
+
+
+                    <!-- Default inline 2-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input radios" id="rdohost"
+                               name="inlineDefaultRadiosExample">
+                        <label class="custom-control-label" for="rdohost">Pending Host</label>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-sm-3 text-center pb-3">
+
+
+                    <!-- Default inline 3-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input radios" id="rdotenant"
+                               name="inlineDefaultRadiosExample">
+                        <label class="custom-control-label" for="rdotenant">Pending Tenant</label>
+                    </div>
+
+                </div>
+
+
+                <div class="col-sm-3 text-center pb-3">
+                    <!-- Default inline 3-->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input radios" id="rdocancel"
+                               name="inlineDefaultRadiosExample">
+                        <label class="custom-control-label" for="rdocancel">Cancelled</label>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div><!--/card-->
+
+     <div class="row mt-4">
+            <div class="col-sm-6 pb-3 text-center">
+                <img id="loading" class="img-fluid mx-auto" src="">
+            </div>
+            <div class="col-sm-6 pb-3">
+                <div class="float-center">
+                    <input id="clear" class="btn btn-secondary btn-lg" type="reset" value="Clear">
+
+
+                    <!--<input id="analyze" class="btn btn-primary btn-lg " type="button" value="Analyze" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order">-->
+                    <button id="analyze" type="submit" class="btn btn-primary btn-lg" onclick="myFunction(this)">Send Data</button>
+
+                    <!-- New button -->
+                     <button id="sendPending" type="submit" class="btn btn-success btn-lg" onclick="sendEmailPending(this)">Send Pending Records</button>
+
+                      <!-- New button -->
+                    <button id="sendReceipt" type="submit" class="btn btn-info btn-lg" onclick="sendEmailReceipt(this)">Receipt</button>
+                </div>
+            </div>
+        </div>
+
+    <div class="table-responsive mt-2">
+        <table id="bookings" class="table table-md table-hover table-striped table-dark">
+            <thead>
+            <tr>
+                <th>
+                <input type="checkbox" class="checkAll" name="checkAll" />
+                </th>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Booking #</th>
+                <th scope="col">Tenant</th>
+                <th scope="col">Email</th>
+                <th scope="col">Check In</th>
+                <th scope="col">Check out</th>
+                <th scope="col">Host</th>
+                <th scope="col">Property</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for booking in bookings_confirmed %}
+            <tr>
+                <td><input type="checkbox" name="item[]" value="1"></td>
+                <th scope="row"> {{ forloop.counter }}</th>
+                <td>{{ booking.post_date }}</td>
+                <td>{{ booking.ID }}</td>
+                <td>{{ booking.first_name }}</td>
+                <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ booking.user_email }}</td>
+                <td>{{ booking.check_in }}</td>
+                <td>{{ booking.check_out }}</td>
+                <td>{{ booking.owneralias }}</td>
+                <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">{{ booking.prop_id }}--{{ booking.prop_name }}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+
+ /* $('#defaultInline1').on('click', function() {
+
+      alert("I am an alert box!");
+
+}); */
+
+$('.radios').on('click', function() {
+    var bookingstatus = '';
+    switch (event.target.id) {
+        case "rdoconfirmed":
+            bookingstatus = 'Confirmed';
+            break;
+        case "rdohost":
+            bookingstatus = 'Pending';
+            break;
+        case "rdotenant":
+            bookingstatus = 'Waiting';
+            break;
+        case "rdocancel":
+            bookingstatus = 'Cancel';
+            break;
+        default:
+            break;
+    }
+
+    $.getJSON('{% url "bookings_status" %}', {
+        bookingstype: bookingstatus
+    },
+    function(data) {
+        var counter = 1;
+        $("#bookings tbody tr").detach();
+       /*  if (!isEmpty(data)) {
+            for (var i = 0; i < data.length; i++) {
+                var f = new Date(data[i].post_date);
+                var checkIn = format(data[i].booking_from_date);
+                var checkOut = format(data[i].booking_to_date);
+                
+                $("#bookings tbody").append('<tr><td><input type="checkbox" name="item[]" value="1"></td><td>' + counter + '</td><td>' + format(data[i].post_date) + '</td><td class="bookid">' + data[i].ID + ' - INV # ' + data[i].invoice_no + '</td><td class="tenant">' + data[i].first_name + '</td><td class="mail" style="word-wrap: break-word;min-width: 160px;max-width: 160px;">' + data[i].user_email + '</td><td class="checkin">' + checkIn + '</td><td class="checkout">' + checkOut + '</td><td class="host">' + data[i].owneralias + '</td><td class="property" style="word-wrap: break-word;min-width: 160px;max-width: 160px;">' + data[i].prop_id + ' -- ' + data[i].prop_name + '</td><td class="period">' + dateDiff(checkIn, checkOut) + '</td></tr>');
+                counter++;
+            }
+        } */
+
+        if (!isEmpty(data)) {
+            for (var i = 0; i < data.length; i++) {
+                var f = new Date(data[i].post_date);
+                var checkIn = format(data[i].booking_from_date);
+                var checkOut = format(data[i].booking_to_date);
+                
+                $("#bookings tbody").append('<tr><td><input type="checkbox" name="item[]" value="1"></td><td>' + counter + '</td><td>' + format(data[i].post_date) + '</td><td class="bookid">' + data[i].ID + ' - INV # ' + data[i].invoice_no + '</td><td class="tenant">' + data[i].first_name + '</td><td class="mail" style="word-wrap: break-word;min-width: 160px;max-width: 160px;">' + data[i].user_email + '</td><td class="checkin">' + checkIn + '</td><td class="checkout">' + checkOut + '</td><td class="host">' + data[i].owneralias + '</td><td class="property" style="word-wrap: break-word;min-width: 160px;max-width: 160px;">' + data[i].prop_id + ' -- ' + data[i].prop_name + '</td><td class="period">' + dateDiff(checkIn, checkOut) + '</td><td class="invno" style="display: none;">' + data[i].invoice_no + '</td></tr>');
+
+            
+                counter++;
+            }
+            // After updating the table, highlight the "Check In" column again
+            highlightCheckInColumn();
+        }
+
+
+
+
+        
+    })
+    .done(function() {
+        console.log('getJSON request displaySECFillings succeeded!');
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        $("#bookings tbody tr").detach();
+        console.log('getJSON request failed BOKING STATUS ! ' + textStatus);
+    });
+});
+
+$(document).ready(function() {
+    highlightCheckInColumn();
+});
+
+function highlightCheckInColumn() {
+    // Get today's date
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Loop through each row in the table
+    $('#bookings tbody tr').each(function() {
+        var checkInDateStr = $(this).find('td:nth-child(7)').text();
+        var checkInDate = new Date(checkInDateStr);
+
+        // Compare check-in date with today's date
+        if (checkInDate <= today) {
+            // If check-in date is greater than or equal to today, add CSS class to highlight the "Check In" column in red
+            $(this).find('td:nth-child(7)').addClass('highlight-checkin');
+        }
+    });
+}
+
+function format(dateStr) {
+    var date = new Date(dateStr);
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+   
+    return month + '-' + day + '-' + year;
+    //return " ";
+}
+
+function dateDiff(startDateStr, endDateStr) {
+    var startDate = new Date(startDateStr);
+    var endDate = new Date(endDateStr);
+    var diffTime = Math.abs(endDate - startDate);
+    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+}
+
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
+/* function format(inputDate) {
+    var date = new Date(inputDate);
+    if (!isNaN(date.getTime())) {
+        // Months use 0 index.
+        return date.getMonth() + 1 + '/' + date.getDate() + '/' + date.getFullYear();
+
+    }
+    else{
+          return '';
+    }
+} */
+
+/* function format(dateStr) {
+    var date = new Date(dateStr);
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+    return month + '-' + day + '-' + year;
+} */
+
+function diff_year_month_day(dt1, dt2)
+{
+
+   var d1 = new Date(dt1);
+   var d2 = new Date(dt2);
+
+  var time =(d2.getTime() - d1.getTime()) / 1000;
+  var year  = Math.abs(Math.round((time/(60 * 60 * 24))/365.25));
+  var month = Math.abs(Math.round(time/(60 * 60 * 24 * 7 * 4)));
+  var days = Math.abs(Math.round(time/(3600 * 24)));
+  return "Year :- " + year + " Month :- " + month + " Days :-" + days;
+
+}
+
+function dateDiff(d1, d2)
+{
+
+     var dt1 = new Date(d1);
+     var dt2 = new Date(d2);
+    /*
+     * setup 'empty' return object
+     */
+    var ret = {days:0, months:0, years:0};
+
+    /*
+     * If the dates are equal, return the 'empty' object
+     */
+    if (dt1 == dt2) return ret;
+
+    /*
+     * ensure dt2 > dt1
+     */
+    if (dt1 > dt2)
+    {
+        var dtmp = dt2;
+        dt2 = dt1;
+        dt1 = dtmp;
+    }
+
+    /*
+     * First get the number of full years
+     */
+
+    var year1 = dt1.getFullYear();
+    var year2 = dt2.getFullYear();
+
+    var month1 = dt1.getMonth();
+    var month2 = dt2.getMonth();
+
+    var day1 = dt1.getDate();
+    var day2 = dt2.getDate();
+
+    /*
+     * Set initial values bearing in mind the months or days may be negative
+     */
+
+    ret['years'] = year2 - year1;
+    ret['months'] = month2 - month1;
+    ret['days'] = day2 - day1;
+
+    /*
+     * Now we deal with the negatives
+     */
+
+    /*
+     * First if the day difference is negative
+     * eg dt2 = 13 oct, dt1 = 25 sept
+     */
+    if (ret['days'] < 0)
+    {
+        /*
+         * Use temporary dates to get the number of days remaining in the month
+         */
+        var dtmp1 = new Date(dt1.getFullYear(), dt1.getMonth() + 1, 1, 0, 0, -1);
+
+        var numDays = dtmp1.getDate();
+
+        ret['months'] -= 1;
+        ret['days'] += numDays;
+
+    }
+
+    /*
+     * Now if the month difference is negative
+     */
+    if (ret['months'] < 0)
+    {
+        ret['months'] += 12;
+        ret['years'] -= 1;
+    }
+
+    if (ret['years'] <= 0)
+    {
+       return ret['months'] + ' Month(s) ' + ret['days'] + ' Day(s)';
+    }
+
+    return ret['years'] + ' Year(s) ' + ret['months'] + ' Month(s) ' + ret['days'] + ' Day(s)';
+}
+
+/* function sendEmailPending(x) {
+    var rows = [];
+    $('#bookings').find('tr').each(function() {
+        if ($(this).find('input[type="checkbox"]').is(':checked')) {
+              alert($(this).closest("tr").find(".tenant").text());
+            var dict = {
+                tenant: $(this).closest("tr").find(".tenant").text(),
+                email: $(this).closest("tr").find(".mail").text(),
+                checkin: $(this).closest("tr").find(".checkin").text(),
+                checkout: $(this).closest("tr").find(".checkout").text(),
+                period: $(this).closest("tr").find(".period").text(),
+                host: $(this).closest("tr").find(".host").text(),
+                property: $(this).closest("tr").find(".property").text(),
+            };
+
+            rows.push(dict);
+        }
+    });
+
+    var asJSON = JSON.stringify(rows);
+
+    $.getJSON('{% url "sendemailpending" %}', {
+			email: $(x).closest("tr").find(".mail").text(),
+			tenant: $(x).closest("tr").find(".tenant").text(),
+			checkin: $(x).closest("tr").find(".checkin").text(),
+			checkout: $(x).closest("tr").find(".checkout").text(),
+			period: $(x).closest("tr").find(".period").text(),
+			host: $(x).closest("tr").find(".host").text(),
+			property: $(x).closest("tr").find(".property").text(),
+			rows: JSON.stringify(rows),
+
+		},)
+    .done(function(data) {
+        var counter = 1;
+        if (!isEmpty(data)) {
+            // Handle success
+        }
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log('getJSON request failed for sending pending emails: ' + textStatus);
+    });
+} */
+
+/* function sendEmailPending(x) {
+    var rows = [];
+    $('#bookings').find('tr').each(function() {
+        if ($(this).find('input[type="checkbox"]').is(':checked')) {
+            alert($(this).closest("tr").find(".tenant").text());
+            var dict = {
+                tenant: $(this).closest("tr").find(".tenant").text(),
+                email: $(this).closest("tr").find(".mail").text(),
+                checkin: $(this).closest("tr").find(".checkin").text(),
+                checkout: $(this).closest("tr").find(".checkout").text(),
+                period: $(this).closest("tr").find(".period").text(),
+                host: $(this).closest("tr").find(".host").text(),
+                property: $(this).closest("tr").find(".property").text(),
+                bookid: $(this).closest("tr").find(".bookid").text(),
+            };
+
+            rows.push(dict);
+        }
+    });
+
+    var requestData = {
+        email: $(x).closest("tr").find(".mail").text(),
+        tenant: $(x).closest("tr").find(".tenant").text(),
+        checkin: $(x).closest("tr").find(".checkin").text(),
+        checkout: $(x).closest("tr").find(".checkout").text(),
+        period: $(x).closest("tr").find(".period").text(),
+        host: $(x).closest("tr").find(".host").text(),
+        property: $(x).closest("tr").find(".property").text(),
+        bookid: $(x).closest("tr").find(".bookid").text(),
+        rows: JSON.stringify(rows)
+    };
+
+    $.ajax({
+        url: '{% url "sendemailpending" %}',
+        type: 'GET',
+        data: requestData,
+        success: function(data) {
+            var counter = 1;
+            if (!isEmpty(data)) {
+                // Handle success
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('AJAX request failed for sending pending emails: ' + textStatus);
+        }
+    });
+} */
+
+/* function sendEmailPending(x) {
+    var row = $(x).closest("tr");
+    var dict = {
+        tenant: row.find(".tenant").text(),
+        email: row.find(".mail").text(),
+        checkin: row.find(".checkin").text(),
+        checkout: row.find(".checkout").text(),
+        period: row.find(".period").text(),
+        host: row.find(".host").text(),
+        property: row.find(".property").text(),
+        bookid: row.find(".bookid").text()
+    };
+
+    var requestData = {
+        email: dict.email,
+        tenant: dict.tenant,
+        checkin: dict.checkin,
+        checkout: dict.checkout,
+        period: dict.period,
+        host: dict.host,
+        property: dict.property,
+        bookid: dict.bookid,
+        rows: JSON.stringify([dict])
+    };
+
+    $.ajax({
+        url: '{% url "sendemailpending" %}',
+        type: 'GET',
+        data: requestData,
+        success: function(data) {
+            // Handle success
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('AJAX request failed for sending pending emails: ' + textStatus);
+        }
+    });
+} */
+
+function sendEmailPending(x) {
+  var selectedRows = [];
+  
+  $('#bookings').find('tr').each(function() {
+    if ($(this).find('input[type="checkbox"]').is(':checked')) {
+      var row = $(this);
+      var dict = {
+        tenant: row.find(".tenant").text(),
+        email: row.find(".mail").text(),
+        checkin: row.find(".checkin").text(),
+        checkout: row.find(".checkout").text(),
+        period: row.find(".period").text(),
+        host: row.find(".host").text(),
+        property: row.find(".property").text(),
+        bookid: row.find(".bookid").text(),
+        invno: row.find(".invno").text()
+      };
+      
+      selectedRows.push(dict);
+    }
+  });
+  
+  var requestData = {
+    rows: JSON.stringify(selectedRows)
+  };
+  
+  $.ajax({
+    url: '{% url "sendemailpending" %}',
+    type: 'GET',
+    data: requestData,
+    success: function(data) {
+      // Handle success
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('AJAX request failed for sending pending emails: ' + textStatus);
+    }
+  });
+}
+
+function sendEmailReceipt(x) {
+  var selectedRows = [];
+  
+  $('#bookings').find('tr').each(function() {
+    if ($(this).find('input[type="checkbox"]').is(':checked')) {
+      var row = $(this);
+      var dict = {
+        tenant: row.find(".tenant").text(),
+        email: row.find(".mail").text(),
+        checkin: row.find(".checkin").text(),
+        checkout: row.find(".checkout").text(),
+        period: row.find(".period").text(),
+        host: row.find(".host").text(),
+        property: row.find(".property").text(),
+        bookid: row.find(".bookid").text(),
+        invno: row.find(".invno").text()
+      };
+      
+      selectedRows.push(dict);
+    }
+  });
+  
+  var requestData = {
+    rows: JSON.stringify(selectedRows)
+  };
+  
+  $.ajax({
+    url: '{% url "sendemailreceipt" %}',
+    type: 'GET',
+    data: requestData,
+    success: function(data) {
+      // Handle success
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('AJAX request failed for sending pending emails: ' + textStatus);
+    }
+  });
+}
+
+
+
+
+
+
+
+function myFunction(x) {
+
+    // var test = $(this).find("#tkrs").html()
+    //var price = x.find("td").eq(2).html();
+
+    var checkFound = false;
+    var rows = new Array();
+    $('#bookings').find('tr').each(function() {
+
+      if ($(this).find('input[type="checkbox"]').is(':checked')) {
+
+         //alert($(this).closest("tr").find(".tenant").text());
+
+         var dict = {
+            tenant: $(this).closest("tr").find(".tenant").text(),
+            email: $(this).closest("tr").find(".mail").text(),
+            checkin: $(this).closest("tr").find(".checkin").text(),
+			checkout: $(this).closest("tr").find(".checkout").text(),
+			period: $(this).closest("tr").find(".period").text(),
+			host: $(this).closest("tr").find(".host").text(),
+			property: $(this).closest("tr").find(".property").text(),
+
+        };
+
+        rows.push(dict);
+
+
+      }
+    });
+
+        var asJSON = JSON.stringify(rows);
+
+    $.getJSON('{% url "sendemail_other" %}', {
+			email: $(x).closest("tr").find(".mail").text(),
+			tenant: $(x).closest("tr").find(".tenant").text(),
+			checkin: $(x).closest("tr").find(".checkin").text(),
+			checkout: $(x).closest("tr").find(".checkout").text(),
+			period: $(x).closest("tr").find(".period").text(),
+			host: $(x).closest("tr").find(".host").text(),
+			property: $(x).closest("tr").find(".property").text(),
+			rows: JSON.stringify(rows),
+
+		},
+		function (data) {
+
+			var counter = 1;
+
+			if (!isEmpty(data)) {
+
+
+			}
+
+		})
+	.done(function () {
+		console.log('getJSON request EMAIL succeeded!');
+	})
+	.fail(function (jqXHR, textStatus, errorThrown) {
+
+		console.log('getJSON request failed SENDING EMAIL ! ' + textStatus);
+	});
+
+
+
+}
+
+
+$( "#bookings tbody" ).on( "click", "tr", function() {
+      //  alert("ghhgjhgkgh!!");
+});
+
+
+//var table = $('#bookings').DataTable();
+
+$("#bookings tbody").on( "click", "tr", function () {
+      //$(this).toggleClass('selected');
+ } );
+
+$(".checkAll").on("click", function() {
+    $(this)
+      .closest("table")
+      .find("tbody :checkbox")
+      .prop("checked", this.checked)
+      .closest("tr")
+      .toggleClass("selected", this.checked);
+ });
+
+
+
+
+</script>
+
+{% endblock content %}
+
+
+
+ 

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Invoice</title>
+  <style>
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      color: #30373b;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #e1e1e1;
+    }
+    .header {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #f5694b;
+      margin-bottom: 20px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo img {
+      max-width: 100px;
+    }
+    .info {
+      margin-bottom: 20px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      align-items: baseline;
+    }
+    .info-label {
+      font-weight: bold;
+      color: #f5694b;
+    }
+    .info-value {
+      flex-grow: 1;
+      text-align: right;
+    }
+    .items {
+      margin-bottom: 20px;
+    }
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .item-name {
+      flex-grow: 1;
+    }
+    .item-amount {
+      flex-basis: 100px;
+      text-align: right;
+    }
+    .total {
+      font-weight: bold;
+      text-align: right;
+    }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #888888;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e1e1e1;
+    }
+    .referral-banner {
+      background-color: #f5694b;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    .referral-banner-text {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .action-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      color: #f5694b;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .action-button:hover {
+      background-color: #f5694b;
+      color: #ffffff;
+    }
+
+    .navigation {
+      background-color: #f5694b;
+      padding: 10px;
+      text-align: center;
+    }
+    .navigation a {
+      color: #ffffff;
+      text-decoration: none;
+      margin-right: 10px;
+    }
+    .social-icons {
+      margin-right: 10px;
+    }
+    .follow-text {
+      margin-top: 10px;
+    }
+
+    /* Responsive Styles */
+    @media screen and (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      .logo img {
+        max-width: 80px;
+      }
+      .info-row,
+      .item-row {
+        flex-wrap: wrap;
+      }
+      .info-label,
+      .info-value,
+      .item-name,
+      .item-amount {
+        flex-basis: 100%;
+        text-align: left;
+      }
+      .total {
+        text-align: left;
+      }
+      .navigation a {
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="navigation">
+      <a href="https://www.nomadroof.com/">Home</a>
+      <a href="https://www.nomadroof.com/exclusive-properties/">Our Properties</a>
+      <a href="https://bit.ly/3ILbeVe">Contact Us</a>
+    </div>
+    <div class="header">Invoice</div>
+    <div class="logo">
+      <img src="http://www.nomadroof.com/wp-content/uploads/2016/06/LogoIcon.png" alt="Logo">
+    </div>
+    <div class="info">
+      <div class="info-row">
+        <span class="info-label">Customer Name:</span>
+        <span class="info-value">{{customer_name}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Property:</span>
+        <span class="info-value">{{property_name}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Receipt Number:</span>
+        <span class="info-value">{{receipt_number}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Receipt Date:</span>
+        <span class="info-value">{{receipt_date}}</span>
+      </div>
+    </div>
+    <div class="items">
+      <div class="item-row">
+        <span class="item-name">First Month's Rent</span>
+        <span class="item-amount">${{first_month_rent}}</span>
+      </div>
+      <div class="item-row">
+        <span class="item-name">Service Fee</span>
+        <span class="item-amount">${{service_fee}}</span>
+      </div>
+    </div>
+    <div class="total">Total: ${{total_amount}}</div>
+    <div class="referral-banner">
+      <div class="referral-banner-text">
+        Refer a Friend and Get $20 for Each Person That Books with Us!
+      </div>
+      <a href="https://bit.ly/3WLO4E2" class="action-button">More Info</a>
+    </div>
+    <div class="footer">
+      <a href="https://bit.ly/3C7LJcV" target="_blank" class="social-icons">
+        <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_facebook-logo_icon_48x48.png" alt="Facebook Icon" width="24" height="24">
+      </a>
+      <a href="https://bit.ly/3oFBgT5" target="_blank" class="social-icons">
+        <img src="https://www.nomadroof.com/wp-content/uploads/2023/05/nomadroof_app_instagram_logo_icon_48x48.png" alt="Instagram Icon" width="24" height="24">
+      </a>
+      <p class="follow-text">Unlock the Magic of Nomadroof Friendships</p>
+      <br>
+      Thank you for your payment! If you have any questions, please contact us at customersupport@nomadroof.com.
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 20px;">
+    <img src="https://www.nomadroof.com/wp-content/uploads/2018/09/thnk_u-1.jpg" alt="Thank You Image" style="width: 200px;">
+  </div>
+</body>
+</html>
