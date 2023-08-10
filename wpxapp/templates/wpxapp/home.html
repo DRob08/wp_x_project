@@ -74,26 +74,23 @@
         </div>
     </div><!--/card-->
 
-     <div class="row mt-4">
-            <div class="col-sm-6 pb-3 text-center">
-                <img id="loading" class="img-fluid mx-auto" src="">
-            </div>
-            <div class="col-sm-6 pb-3">
-                <div class="float-center">
+    <div class="row mt-4">
+        <div class="col-sm-6 pb-3 text-center">
+            <img id="loading" class="img-fluid mx-auto" src="">
+        </div>
+        <div class="col-sm-6 pb-3">
+            <div class="float-center d-flex justify-content-end">
+                <div class="btn-group" role="group" aria-label="Action Buttons">
                     <input id="clear" class="btn btn-secondary btn-lg" type="reset" value="Clear">
-
-
-                    <!--<input id="analyze" class="btn btn-primary btn-lg " type="button" value="Analyze" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order">-->
-                    <button id="analyze" type="submit" class="btn btn-primary btn-lg" onclick="myFunction(this)">Send Data</button>
-
-                    <!-- New button -->
-                     <button id="sendPending" type="submit" class="btn btn-success btn-lg" onclick="sendEmailPending(this)">Send Pending Records</button>
-
-                      <!-- New button -->
-                    <button id="sendReceipt" type="submit" class="btn btn-info btn-lg" onclick="sendEmailReceipt(this)">Receipt</button>
+                    <button id="analyze" type="submit" class="btn btn-primary btn-lg mx-2" onclick="myFunction(this)">Send Data</button>
+                    <button id="sendPending" type="submit" class="btn btn-success btn-lg mx-2" onclick="sendEmailPending(this)">Send Pending Records</button>
+                    <button id="sendReceipt" type="submit" class="btn btn-info btn-lg mx-2" onclick="sendEmailReceipt(this)">Receipt</button>
                 </div>
             </div>
         </div>
+    </div>
+    
+    
 
     <div class="table-responsive mt-2">
         <table id="bookings" class="table table-md table-hover table-striped table-dark">
