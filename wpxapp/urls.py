@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^sendemail_other/$', views.sendemail_other, name='sendemail_other'),
     url(r'^sendemailpending/$', views.sendemailpending, name='sendemailpending'),
     url(r'^sendemailreceipt/$', views.sendemailreceipt, name='sendemailreceipt'),
+    url(r'^sendemailinvoices/$', views.sendemailinvoices, name='sendemailinvoices'),
     url(r'^sendegeneralemail/$', views.sendegeneralemail, name='sendegeneralemail'),
     url(r'^fix_data/$', views.fix_data, name='fix_data'),
     url(r'^send_received_message_email/$', views.send_received_message_email, name='send_received_message_email'),

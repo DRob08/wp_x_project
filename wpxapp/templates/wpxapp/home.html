@@ -85,6 +85,8 @@
                     <button id="analyze" type="submit" class="btn btn-primary btn-lg mx-2" onclick="myFunction(this)">Send Data</button>
                     <button id="sendPending" type="submit" class="btn btn-success btn-lg mx-2" onclick="sendEmailPending(this)">Send Pending Records</button>
                     <button id="sendReceipt" type="submit" class="btn btn-info btn-lg mx-2" onclick="sendEmailReceipt(this)">Receipt</button>
+                    <!-- Add the new Invoices button -->
+                    <button id="sendInvoices" type="submit" class="btn btn-warning btn-lg mx-2" onclick="sendEmailInvoices(this)">Invoices</button>
                 </div>
             </div>
         </div>
@@ -190,11 +192,7 @@ $('.radios').on('click', function() {
             // After updating the table, highlight the "Check In" column again
             highlightCheckInColumn();
         }
-
-
-
-
-        
+   
     })
     .done(function() {
         console.log('getJSON request displaySECFillings succeeded!');
@@ -530,6 +528,45 @@ function sendEmailPending(x) {
   
   $.ajax({
     url: '{% url "sendemailpending" %}',
+    type: 'GET',
+    data: requestData,
+    success: function(data) {
+      // Handle success
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log('AJAX request failed for sending pending emails: ' + textStatus);
+    }
+  });
+}
+
+function sendEmailInvoices(x) {
+  var selectedRows = [];
+  
+  $('#bookings').find('tr').each(function() {
+    if ($(this).find('input[type="checkbox"]').is(':checked')) {
+      var row = $(this);
+      var dict = {
+        tenant: row.find(".tenant").text(),
+        email: row.find(".mail").text(),
+        checkin: row.find(".checkin").text(),
+        checkout: row.find(".checkout").text(),
+        period: row.find(".period").text(),
+        host: row.find(".host").text(),
+        property: row.find(".property").text(),
+        bookid: row.find(".bookid").text(),
+        invno: row.find(".invno").text()
+      };
+      
+      selectedRows.push(dict);
+    }
+  });
+  
+  var requestData = {
+    rows: JSON.stringify(selectedRows)
+  };
+  
+  $.ajax({
+    url: '{% url "sendemailinvoices" %}',
     type: 'GET',
     data: requestData,
     success: function(data) {

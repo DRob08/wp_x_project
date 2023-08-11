@@ -1419,11 +1419,11 @@ def sendemailreceipt(request):
         # Create the email message
         subject = 'Thank you for booking with us!'
         from_email = 'Nomadroof <no-reply@nomadroof.com>'
-        to_email = ['darwin.robinson8@gmail.com']  # Use the recipient's email address
-        message = EmailMultiAlternatives(subject, '', from_email, to_email)
-        """to_email = [email]  # Use the recipient's email address
+        #to_email = ['darwin.robinson8@gmail.com']  # Use the recipient's email address
+        #message = EmailMultiAlternatives(subject, '', from_email, to_email)
+        to_email = [email]  # Use the recipient's email address
         bcc_email = ['darwin.robinson8@gmail.com', 'tomg_g@hotmail.com']  # Your email address
-        message = EmailMultiAlternatives(subject, '', from_email, to_email, bcc_email) """
+        message = EmailMultiAlternatives(subject, '', from_email, to_email, bcc_email) 
         message.attach_alternative(html_content, "text/html")
 
         try:
@@ -1435,6 +1435,216 @@ def sendemailreceipt(request):
                 'error': f'Failed to send email to {email}: {str(e)}'
             }
             return JsonResponse(data, status=500)
+
+    # Return a JSON response indicating success
+    data = {
+        'message': 'Emails sent successfully.'
+    }
+    return JsonResponse(data)
+
+
+def sendemailinvoices(request):
+    con = engine.connect()
+
+    rows = json.loads(request.GET.get('rows'))
+    # Create a list to hold records
+    email_records = []
+    grand_total = 0
+
+    for booking in rows:
+        tenant = booking["tenant"]
+        email = booking["email"]
+        checkin = booking["checkin"]
+        checkout = booking["checkout"]
+        period = booking["period"]
+        host = booking["host"]
+        property_name = booking["property"]
+        bookid = booking["bookid"]
+        invno = booking["invno"]
+      
+
+
+        # Split the string at the dash and take the first part
+        bookid = bookid.split("-")[0]
+
+        # Remove any leading or trailing whitespace
+        bookid = bookid.strip()
+
+        print(bookid)
+
+        receipt_number = bookid + invno
+
+        split_data = property_name.split('--')
+
+        # Extract the number and text after the dashes
+        property_id = split_data[0].strip()
+        property_name = split_data[1].strip()
+
+        print("Property ID:", property_id)
+        print("Name:", property_name)
+         
+        
+        print("Inv #:", invno)
+
+        sqlqry = f"""
+        SELECT wp_posts.post_date, wp_posts.post_title, m2.meta_value as property_address, 
+        m1.meta_value as about_neighborhood, m3.meta_value images_id, m4.meta_value as image_path,
+        m5.meta_value as images_data, m6.meta_value as monthly_fee, m7.meta_value as total_paid, um.meta_value as first_name, 
+        um2.meta_value as last_name, m8.meta_value, wp_posts.post_author, m9.meta_value as inv_date, mt.meta_value as item_price_total
+        FROM wp_posts
+        INNER JOIN wp_postmeta m1 ON wp_posts.ID = m1.post_id
+        INNER JOIN wp_postmeta m2 ON wp_posts.ID = m2.post_id
+        INNER JOIN wp_postmeta m3 ON wp_posts.ID = m3.post_id
+        INNER JOIN wp_postmeta m4 ON m3.meta_value = m4.post_id
+        INNER JOIN wp_postmeta m5 ON m3.meta_value = m5.post_id
+        INNER JOIN wp_postmeta m6 ON '{invno}' = m6.post_id
+        INNER JOIN wp_postmeta m7 ON '{invno}' = m7.post_id
+        INNER JOIN wp_postmeta m8 ON '{invno}' = m8.post_id
+        INNER JOIN wp_postmeta m9 ON '{invno}' = m9.post_id
+        INNER JOIN wp_postmeta mt ON '{invno}' = mt.post_id
+        INNER JOIN wp_usermeta um ON m8.meta_value = um.user_id
+        INNER JOIN wp_usermeta um2 ON m8.meta_value = um2.user_id
+        WHERE wp_posts.post_type = 'estate_property'
+        AND wp_posts.post_status = 'publish'
+        AND wp_posts.ID = '{property_id}'
+        AND m1.meta_key = 'about_neighborhood'
+        AND m2.meta_key = 'property_address'
+        AND m3.meta_key = '_thumbnail_id'
+        AND m4.meta_key = '_wp_attached_file'
+        AND m5.meta_key = '_wp_attachment_metadata'
+        AND m6.meta_key = 'month_price'
+        AND m7.meta_key = 'depozit_paid'
+        AND m8.meta_key = 'buyer_id'
+        AND m9.meta_key = 'purchase_date'
+        AND mt.meta_key = 'item_price'
+        AND (um.meta_key = 'first_name' AND LENGTH(um.meta_value) > 0)
+        AND (um2.meta_key = 'last_name' AND LENGTH(um2.meta_value) > 0)
+      
+        """
+
+        #print(sqlqry)
+        result = con.execute(text(sqlqry)).fetchall()
+        count = len(result)
+
+        row = result[0]  # Get the first (and only) row
+
+        # Access values using indexing
+        post_date = row[0]
+        post_title = row[1]
+        property_address = row[2]
+        about_neighborhood = row[3]
+
+        # Or access values using attribute-based access
+        post_date = row.post_date
+        post_title = row.post_title
+        property_address = row.property_address
+        about_neighborhood = row.about_neighborhood
+        images_id = row.images_id
+        image_path = row.image_path
+        images_data = row.images_data
+        monthly_fee = row.monthly_fee
+        total_paid = row.total_paid
+        first_name = row.first_name
+        last_name = row.last_name
+        inv_date = row.inv_date
+        item_price_total = row.item_price_total
+
+        full_name = f"{row.last_name}, {row.first_name}"
+
+        # Print the values
+        print("Post Date:", post_date)
+        print("Post Title:", post_title)
+        print("Property Address:", property_address)
+        print("Monthly fee:", monthly_fee)
+        print("Total Paid:", total_paid)
+        print("Item Price Total:", item_price_total)
+        print("Period:", period)
+
+        datetime_obj = datetime.datetime.strptime(inv_date, "%Y-%m-%d %H:%M:%S")
+        date_without_time = datetime_obj.replace(hour=0, minute=0, second=0, microsecond=0)
+        formatted_date = date_without_time.strftime("%b %d, %Y")
+        print(formatted_date)
+
+        # Convert the strings to integers
+        total_paid_float = float(total_paid)
+        monthly_fee_float = float(monthly_fee)
+        item_price_float = float(item_price_total)
+
+        # Perform the subtraction
+
+        #result = round(monthly_fee_float - total_paid_float , 2)
+        result = round(item_price_float - monthly_fee_float , 2)
+        print('Populating array......')
+        print(result)
+
+        # Convert the result back to a string if needed
+        service_fee_str = str(result)
+
+        # Your existing code for retrieving data from 'booking'
+        email_records.append({
+            'tenant': full_name,
+            'email': email,
+            'checkin': checkin,
+            'checkout': checkout,
+            'receipt_date': formatted_date,
+            'receipt_number': receipt_number,
+            'period': period,
+            'host': host,
+            'property': property_name,
+            'booking_number': bookid,
+            'monthly_fee': monthly_fee,
+            'total_amount': item_price_total,
+            'service_fee': service_fee_str,
+            'host': host,
+            
+        })
+
+        grand_total +=  item_price_float
+       
+
+       
+        # Load the email template and populate it with data
+        #html_content = render_to_string('wpxapp/receipt_email_template.html', {
+        #html_content = render_to_string('wpxapp/new_receipt_template.html', {
+        """ html_content = render_to_string('wpxapp/invoices_email_template.html', {
+            'customer_name': full_name,
+            'receipt_date': formatted_date,
+            'receipt_number': receipt_number,
+            'period': period,
+            'host': host,
+            'property_name': property_name,
+            'booking_number': bookid,
+            'first_month_rent': monthly_fee,
+            'total_amount': item_price_total,
+            'service_fee': service_fee_str,
+        }) """
+
+       
+
+    context = {
+        'email_records': email_records,
+        'grand_total': grand_total,
+    } 
+        
+    html_content = render_to_string('wpxapp/invoices_email_template.html', context)
+
+    # Create the email message
+    subject = 'Invoices Nomadroof'
+    from_email = 'Nomadroof <no-reply@nomadroof.com>'
+    to_email = ['darwin.robinson8@gmail.com']  # Use the recipient's email address
+    message = EmailMultiAlternatives(subject, '', from_email, to_email)
+      
+    message.attach_alternative(html_content, "text/html")
+
+    try:
+        # Send the email
+        message.send()
+    except Exception as e:
+        # Return a JSON response with an error message
+        data = {
+            'error': f'Failed to send email to {email}: {str(e)}'
+        }
+        return JsonResponse(data, status=500)
 
     # Return a JSON response indicating success
     data = {
